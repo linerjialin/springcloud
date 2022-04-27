@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/consumer")
 public class OrderController {
 
-    public static final String PAYENT_URL = "http://localhost:8001";
+    public static final String PAYENT_URL = "http://CLOUD-PAYMENT-SERVICE";
 
     @Resource
     private RestTemplate restTemplate;
