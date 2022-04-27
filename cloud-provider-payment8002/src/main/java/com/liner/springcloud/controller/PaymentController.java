@@ -5,10 +5,12 @@ import com.liner.springcloud.entities.Payment;
 import com.liner.springcloud.service.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -19,6 +21,9 @@ public class PaymentController {
 
     @Value("${server.port}")
     private String serverPort;
+
+    @Resource
+    private DiscoveryClient discoveryClient;
 
     @PostMapping("/create")
     public CommonResult<Payment> create(@RequestBody Payment payment){
@@ -34,6 +39,28 @@ public class PaymentController {
         log.info("******查询的结果" + paymentById);
         return paymentById != null ? new CommonResult(200,"查询成功,serverPort:" + serverPort,paymentById)
                 : new CommonResult(444,"没有对应记录，查询ID"+ id,null);
+    }
+
+    @GetMapping(value = "/discovery")
+    public Object discovery() {
+        List<String> services = discoveryClient.getServices();
+        for (String element : services) {
+            log.info("******element:  " + element);
+        }
+        List<ServiceInstance> instances = discoveryClient.getInstances("CLOUD-PAYMENT-SERVICE");
+        for (ServiceInstance instance : instances) {
+            log.info(
+                    "******instance:  "
+                            + instance.getServiceId()
+                            + "\t"
+                            + instance.getHost()
+                            + "\t"
+                            + instance.getPort()
+                            + "\t"
+                            + instance.getUri());
+        }
+        return this.discoveryClient;
+
     }
 
 }
