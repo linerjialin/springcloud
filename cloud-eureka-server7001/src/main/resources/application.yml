@@ -11,9 +11,9 @@ eureka:
     register-with-eureka: false # 不检索自己
     service-url:
       #集群就是指向其他 Eureka
-      defaultZone: http://eureka7002.com:7002/eureka/
+      #defaultZone: http://eureka7002.com:7002/eureka/
       #单机就是指向自己
-      #http://www.eureka7001.com:7001/eureka/
+      defaultZone: http://www.eureka7001.com:7001/eureka/
       #defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
 #  server:
 #    #关闭自我保护机制，保证不可用服务立即被踢出
